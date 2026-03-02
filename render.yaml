@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: laravel-app
+    env: docker
+    plan: free # or starter
+    region: ohio # or your preferred region
+    dockerCommand: ./docker/entrypoint.sh
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /var/www/html/database/database.sqlite
+      - key: SESSION_DRIVER
+        value: cookie # Use cookie driver for simple setups on Render
+      - key: CACHE_STORE
+        value: file

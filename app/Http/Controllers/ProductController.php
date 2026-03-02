@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Http\Request;
+
+class ProductController extends Controller
+{
+    public function index(Request $request)
+    {
+        $categories = Category::all();
+        $query = Product::with('category', 'ratings');
+
+        // Category filter
+        if ($request->filled('category') && $request->category !== 'all') {
+            $query->whereHas('category', fn($q) => $q->where('slug', $request->category));
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'featured');
+        match ($sort) {
+                'price_asc' => $query->orderBy('price', 'asc'),
+                'price_desc' => $query->orderBy('price', 'desc'),
+                'rating' => $query->withAvg('ratings', 'rating')->orderByDesc('ratings_avg_rating'),
+                default => $query->orderByDesc('is_featured')->orderBy('id'),
+            };
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(fn($q) => $q->where('name', 'like', "%{$search}%")
+            ->orWhere('description', 'like', "%{$search}%"));
+        }
+
+        $products = $query->get();
+        $total = $products->count();
+
+        return view('products.index', compact('products', 'categories', 'total', 'sort'));
+    }
+
+    public function show($id)
+    {
+        $product = Product::with('category', 'ratings.user')->findOrFail($id);
+
+        return view('products.show', compact('product'));
+    }
+
+    public function create()
+    {
+        if (!auth()->user() || !auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized action. Only admins can create products.');
+        }
+
+        $categories = Category::all();
+        return view('products.create', compact('categories'));
+    }
+
+    public function store(Request $request)
+    {
+        if (!auth()->user() || !auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|max:2048',
+            'is_featured' => 'nullable|boolean',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image_url'] = 'storage/' . $path;
+        }
+        else {
+            $validated['image_url'] = 'images/placeholder.jpg';
+        }
+
+        $validated['is_featured'] = $request->has('is_featured');
+
+        Product::create($validated);
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+    }
+}
