@@ -17,6 +17,7 @@ RUN apk add --no-cache \
     curl \
     zip \
     unzip \
+    libc6-compat \
     sqlite \
     libpq
 
@@ -37,7 +38,7 @@ COPY composer*.json ./
 # Install PHP dependencies
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_MEMORY_LIMIT=-1
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-progress --no-interaction --no-plugins
 
 # Copy application code
 COPY . .
