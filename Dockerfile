@@ -16,7 +16,8 @@ RUN apk add --no-cache \
     curl \
     zip \
     unzip \
-    sqlite
+    sqlite \
+    libpq
 
 # Install PHP extensions using the official helper
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
