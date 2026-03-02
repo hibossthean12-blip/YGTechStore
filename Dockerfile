@@ -12,6 +12,7 @@ FROM php:8.4-fpm-alpine
 # Install system dependencies (runtime only)
 RUN apk add --no-cache \
     nginx \
+    ca-certificates \
     git \
     curl \
     zip \

@@ -26,6 +26,8 @@ services:
         fromContext: DB_USERNAME
       - key: DB_PASSWORD
         fromContext: DB_PASSWORD
+      - key: DB_SSLMODE
+        value: require
       - key: SESSION_DRIVER
         value: cookie # Use cookie driver for simple setups on Render
       - key: CACHE_STORE
