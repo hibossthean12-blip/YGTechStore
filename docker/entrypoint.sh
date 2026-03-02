@@ -20,8 +20,9 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force
 fi
 
-# Run migrations (only if DB is configured)
+# Run migrations and seeders (only if DB is configured)
 php artisan migrate --force
+php artisan db:seed --force
 
 # Set permissions for storage and cache (recursive)
 chown -R www-data:www-data storage bootstrap/cache
