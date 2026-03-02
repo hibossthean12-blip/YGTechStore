@@ -10,20 +10,32 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Users
-        DB::table('users')->insert([
-            ['id' => 1, 'name' => 'Admin User', 'email' => 'admin@techstore.com', 'password' => Hash::make('password'), 'role' => 'admin', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        // Users - Using updateOrInsert to prevent duplicate key errors on redeploy
+        DB::table('users')->updateOrInsert(
+            ['id' => 1],
+            [
+                'name' => 'Admin User',
+                'email' => 'admin@techstore.com', 
+                'password' => Hash::make('password'), 
+                'role' => 'admin', 
+                'created_at' => now(), 
+                'updated_at' => now()
+            ]
+        );
 
-        // Categories
-        DB::table('categories')->insert([
+        // Categories - Using updateOrInsert to prevent duplicate key errors on redeploy
+        $categories = [
             ['id' => 1, 'name' => 'Audio', 'slug' => 'audio'],
             ['id' => 2, 'name' => 'Wearables', 'slug' => 'wearables'],
             ['id' => 3, 'name' => 'Computers', 'slug' => 'computers'],
             ['id' => 4, 'name' => 'Photography', 'slug' => 'photography'],
             ['id' => 5, 'name' => 'Accessories', 'slug' => 'accessories'],
             ['id' => 6, 'name' => 'Mobile', 'slug' => 'mobile'],
-        ]);
+        ];
+
+        foreach ($categories as $category) {
+            DB::table('categories')->updateOrInsert(['id' => $category['id']], $category);
+        }
 
         // Note: Products and other data remain removed as requested.
     }
