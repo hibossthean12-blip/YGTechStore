@@ -31,15 +31,22 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
+# Copy composer files first for better caching
+COPY composer*.json ./
+
+# Install PHP dependencies
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_MEMORY_LIMIT=-1
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+
 # Copy application code
 COPY . .
 
 # Copy built assets from builder stage
 COPY --from=assets-builder /app/public/build ./public/build
 
-# Install PHP dependencies
-RUN APP_ENV=production DB_CONNECTION=sqlite DB_DATABASE=:memory: \
-    composer install --no-dev --optimize-autoloader
+# Finish composer installation
+RUN composer dump-autoload --optimize --no-dev
 
 # Setup Nginx configuration
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
