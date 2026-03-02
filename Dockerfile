@@ -24,7 +24,7 @@ RUN apk add --no-cache \
     libpq-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring zip exif pcntl bcmath gd \
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd \
     && docker-php-ext-enable opcache
 
 # Get Composer
