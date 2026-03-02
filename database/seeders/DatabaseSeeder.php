@@ -15,6 +15,16 @@ class DatabaseSeeder extends Seeder
             ['id' => 1, 'name' => 'Admin User', 'email' => 'admin@techstore.com', 'password' => Hash::make('password'), 'role' => 'admin', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
-        // Note: Products, Categories, and other data are removed as requested.
+        // Categories
+        DB::table('categories')->insert([
+            ['id' => 1, 'name' => 'Audio', 'slug' => 'audio'],
+            ['id' => 2, 'name' => 'Wearables', 'slug' => 'wearables'],
+            ['id' => 3, 'name' => 'Computers', 'slug' => 'computers'],
+            ['id' => 4, 'name' => 'Photography', 'slug' => 'photography'],
+            ['id' => 5, 'name' => 'Accessories', 'slug' => 'accessories'],
+            ['id' => 6, 'name' => 'Mobile', 'slug' => 'mobile'],
+        ]);
+
+        // Note: Products and other data remain removed as requested.
     }
 }
