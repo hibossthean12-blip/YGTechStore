@@ -9,23 +9,19 @@ RUN npm run build
 # Stage 2: PHP environment
 FROM php:8.4-fpm-alpine
 
-# Install system dependencies
+# Install system dependencies (runtime only)
 RUN apk add --no-cache \
     nginx \
-    libpng-dev \
-    libzip-dev \
-    zip \
-    unzip \
     git \
     curl \
-    oniguruma-dev \
-    libxml2-dev \
-    sqlite-dev \
-    libpq-dev
+    zip \
+    unzip \
+    sqlite
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd \
-    && docker-php-ext-enable opcache
+# Install PHP extensions using the official helper
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions pdo_mysql mbstring zip exif pcntl bcmath gd opcache
 
 # Get Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
