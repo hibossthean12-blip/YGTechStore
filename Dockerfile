@@ -24,7 +24,7 @@ RUN apk add --no-cache \
     libpq-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd \
+RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring zip exif pcntl bcmath gd \
     && docker-php-ext-enable opcache
 
 # Get Composer
@@ -40,7 +40,8 @@ COPY . .
 COPY --from=assets-builder /app/public/build ./public/build
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN APP_ENV=production DB_CONNECTION=sqlite DB_DATABASE=:memory: \
+    composer install --no-dev --optimize-autoloader
 
 # Setup Nginx configuration
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
