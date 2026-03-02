@@ -2,12 +2,12 @@
 
 # Ensure database exists for SQLite
 if [ "$DB_CONNECTION" = "sqlite" ]; then
-    mkdir -p "$(dirname "$DB_DATABASE")"
+    DB_DIR=$(dirname "$DB_DATABASE")
+    mkdir -p "$DB_DIR"
     if [ ! -f "$DB_DATABASE" ]; then
         touch "$DB_DATABASE"
     fi
-    chown www-data:www-data "$DB_DATABASE"
-    chown www-data:www-data "$(dirname "$DB_DATABASE")"
+    chown -R www-data:www-data "$DB_DIR"
 fi
 
 # Run storage link if not exists
