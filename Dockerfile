@@ -19,10 +19,13 @@ RUN apk add --no-cache \
     git \
     curl \
     oniguruma-dev \
-    libxml2-dev
+    libxml2-dev \
+    sqlite-dev \
+    libpq-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring zip exif pcntl bcmath gd \
+    && docker-php-ext-enable opcache
 
 # Get Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

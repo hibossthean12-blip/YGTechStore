@@ -6,6 +6,8 @@ services:
     region: ohio # or your preferred region
     dockerCommand: ./docker/entrypoint.sh
     envVars:
+      - key: APP_URL
+        fromContext: RENDER_EXTERNAL_URL
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
