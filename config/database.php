@@ -96,6 +96,9 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+            'options' => env('PGSQL_ATTR_SSL_CA') ? [
+                1002 => env('PGSQL_ATTR_SSL_CA'), // 1002 is \PDO::PGSQL_ATTR_SSL_CA
+            ] : [],
         ],
 
         'sqlsrv' => [

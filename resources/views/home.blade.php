@@ -110,13 +110,6 @@
         </div>
         <div class="products-grid">
             @foreach($featuredProducts as $product)
-                @php
-                    $avgRating    = round($product->ratings->avg('rating') ?? 0, 1);
-                    $ratingCount  = $product->ratings->count();
-                    // Use static review counts from DB comment for display fidelity
-                    $displayCounts = [1 => 234, 2 => 189, 3 => 312, 4 => 156];
-                    $displayCount  = $displayCounts[$product->id] ?? $ratingCount;
-                @endphp
                 <div class="product-card">
                     <a href="{{ route('products.show', $product->id) }}" class="product-card-img">
                         <img src="/{{ $product->image_url }}"
@@ -126,14 +119,6 @@
                     <div class="product-card-body">
                         <div class="product-category-tag">{{ strtoupper($product->category->name ?? '') }}</div>
                         <a href="{{ route('products.show', $product->id) }}" class="product-name">{{ $product->name }}</a>
-                        <div class="product-rating">
-                            <span class="stars">
-                                @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= floor($avgRating))★@elseif($i - 0.5 <= $avgRating)★@else☆@endif
-                                @endfor
-                            </span>
-                            <span class="rating-count">({{ $displayCount }})</span>
-                        </div>
                         <div class="product-price">${{ number_format($product->price, 2) }}</div>
                         <button class="btn-add-cart" onclick="addToCart({{ $product->id }}, this)">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
@@ -145,20 +130,5 @@
     </div>
 </section>
 
-<!-- PROMO BANNER -->
-<section class="section" style="padding:48px 0;background:#fff;">
-    <div class="container">
-        <div style="background:linear-gradient(135deg,#1a1a2e,#2d1b69);border-radius:20px;padding:48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;">
-            <div>
-                <div style="color:#a78bfa;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;"><i class="fas fa-tag"></i> Limited Time Offer</div>
-                <div style="font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:8px;">Get 20% Off Your<br>First Order</div>
-                <div style="color:#a0aec0;font-size:.9rem;">Use code <strong style="color:#a78bfa;background:rgba(167,139,250,.15);padding:2px 8px;border-radius:6px;">YGTECH20</strong> at checkout</div>
-            </div>
-            <a href="{{ route('products.index') }}" style="background:linear-gradient(135deg,#6c3fff,#a855f7);color:#fff;padding:14px 32px;border-radius:12px;font-weight:700;font-size:1rem;display:inline-flex;align-items:center;gap:8px;transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(108,63,255,.5)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-                Shop Now <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-</section>
 
 @endsection

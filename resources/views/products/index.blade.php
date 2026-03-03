@@ -27,6 +27,13 @@
     .no-products { text-align: center; padding: 80px 24px; color: #6b7280; }
     .no-products i { font-size: 3rem; color: #d1d5db; margin-bottom: 16px; }
     .no-products h3 { font-size: 1.2rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+
+    /* ADMIN ACTIONS */
+    .admin-actions { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #edf2f7; }
+    .btn-edit { flex: 1; padding: 8px; background: #f0ecff; color: #6c3fff; border-radius: 8px; font-size: .8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all .2s; border: none; text-decoration: none; }
+    .btn-edit:hover { background: #6c3fff; color: #fff; }
+    .btn-delete { padding: 8px 12px; background: #fee2e2; color: #ef4444; border-radius: 8px; font-size: .8rem; font-weight: 700; border: none; cursor: pointer; transition: all .2s; }
+    .btn-delete:hover { background: #ef4444; color: #fff; }
 </style>
 @endsection
 
@@ -110,6 +117,23 @@
                             <button class="btn-add-cart" onclick="addToCart({{ $product->id }}, this)">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
+
+                            @auth
+                                @if(auth()->user()->isAdmin())
+                                    <div class="admin-actions">
+                                        <a href="{{ route('products.edit', $product->id) }}" class="btn-edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            @endauth
                         </div>
                     </div>
                 @endforeach

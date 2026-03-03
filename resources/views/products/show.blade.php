@@ -36,18 +36,14 @@
     .guarantee { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: #6b7280; }
     .guarantee i { color: #10b981; }
 
-    /* REVIEWS */
-    .reviews-section { padding: 48px 0; background: #fff; }
-    .reviews-header { margin-bottom: 28px; }
-    .reviews-title { font-size: 1.4rem; font-weight: 800; color: #1a1a2e; }
-    .review-card { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 16px; border: 1px solid #edf2f7; }
-    .review-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-    .review-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,#6c3fff,#a855f7); color: #fff; font-size: .85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .review-author { font-weight: 700; font-size: .9rem; color: #1a1a2e; }
-    .review-date { font-size: .775rem; color: #a0aec0; }
-    .review-stars { color: #f59e0b; font-size: .85rem; margin-left: auto; }
-    .review-text { font-size: .875rem; color: #4a5568; line-height: 1.7; }
-    .no-reviews { text-align: center; padding: 40px; color: #6b7280; }
+    /* NO REVIEWS */
+
+    /* ADMIN ACTIONS */
+    .admin-detail-actions { display: flex; gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid #edf2f7; }
+    .btn-edit-detail { flex: 1; padding: 12px; background: #f0ecff; color: #6c3fff; border-radius: 12px; font-size: .95rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .2s; border: none; text-decoration: none; }
+    .btn-edit-detail:hover { background: #6c3fff; color: #fff; }
+    .btn-delete-detail { padding: 12px 16px; background: #fee2e2; color: #ef4444; border-radius: 12px; font-size: .95rem; font-weight: 700; border: none; cursor: pointer; transition: all .2s; }
+    .btn-delete-detail:hover { background: #ef4444; color: #fff; }
 </style>
 @endsection
 
@@ -79,18 +75,6 @@
                 <div class="detail-category">{{ $product->category->name ?? '' }}</div>
                 <h1 class="detail-name">{{ $product->name }}</h1>
 
-                @php
-                    $avg   = round($product->ratings->avg('rating') ?? 0, 1);
-                    $count = $product->ratings->count();
-                @endphp
-                <div class="detail-rating-row">
-                    <span class="detail-stars">
-                        @for($i=1;$i<=5;$i++)
-                            @if($i<=floor($avg))★@elseif($i-.5<=$avg)★@else☆@endif
-                        @endfor
-                    </span>
-                    <span style="font-size:.875rem;color:#6b7280;">{{ $avg }} ({{ $count }} review{{ $count !== 1 ? 's' : '' }})</span>
-                </div>
 
                 <div class="detail-price">${{ number_format($product->price, 2) }}</div>
                 <div class="detail-stock">
@@ -109,6 +93,23 @@
                     </button>
                 </div>
 
+                @auth
+                    @if(auth()->user()->isAdmin())
+                        <div class="admin-detail-actions">
+                            <a href="{{ route('products.edit', $product->id) }}" class="btn-edit-detail">
+                                <i class="fas fa-edit"></i> Edit Product
+                            </a>
+                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete-detail">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                @endauth
+
                 <div class="guarantee-row">
                     <div class="guarantee"><i class="fas fa-truck"></i> Free Shipping over $50</div>
                     <div class="guarantee"><i class="fas fa-undo"></i> 30-Day Returns</div>
@@ -119,38 +120,5 @@
     </div>
 </div>
 
-<!-- REVIEWS -->
-<section class="reviews-section">
-    <div class="container">
-        <div class="reviews-header">
-            <h2 class="reviews-title">Customer Reviews <span style="color:#6b7280;font-size:1rem;font-weight:500;">({{ $product->ratings->count() }})</span></h2>
-        </div>
-
-        @if($product->ratings->isEmpty())
-            <div class="no-reviews">
-                <i class="fas fa-comment-alt" style="font-size:2.5rem;color:#d1d5db;margin-bottom:12px;display:block;"></i>
-                <p style="font-weight:600;color:#4a5568;">No reviews yet</p>
-                <p style="font-size:.875rem;">Be the first to review this product!</p>
-            </div>
-        @else
-            @foreach($product->ratings as $rating)
-                <div class="review-card">
-                    <div class="review-top">
-                        <div class="review-avatar">{{ substr($rating->user->name ?? 'U', 0, 1) }}</div>
-                        <div>
-                            <div class="review-author">{{ $rating->user->name ?? 'Anonymous' }}</div>
-                            <div class="review-date">{{ \Carbon\Carbon::parse($rating->created_at)->format('M d, Y') }}</div>
-                        </div>
-                        <div class="review-stars">
-                            @for($i=1;$i<=5;$i++)★@endfor
-                            ({{ $rating->rating }})
-                        </div>
-                    </div>
-                    <p class="review-text">{{ $rating->review }}</p>
-                </div>
-            @endforeach
-        @endif
-    </div>
-</section>
 
 @endsection

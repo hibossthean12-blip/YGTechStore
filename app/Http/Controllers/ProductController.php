@@ -87,4 +87,57 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }
+
+    public function edit($id)
+    {
+        if (!auth()->user() || !auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $product = Product::findOrFail($id);
+        $categories = Category::all();
+        return view('products.edit', compact('product', 'categories'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        if (!auth()->user() || !auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $product = Product::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|max:2048',
+            'is_featured' => 'nullable|boolean',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image_url'] = 'storage/' . $path;
+        }
+
+        $validated['is_featured'] = $request->has('is_featured');
+
+        $product->update($validated);
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        if (!auth()->user() || !auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
+    }
 }
