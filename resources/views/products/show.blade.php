@@ -36,14 +36,6 @@
     .guarantee { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: #6b7280; }
     .guarantee i { color: #10b981; }
 
-    /* NO REVIEWS */
-
-    /* ADMIN ACTIONS */
-    .admin-detail-actions { display: flex; gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid #edf2f7; }
-    .btn-edit-detail { flex: 1; padding: 12px; background: #f0ecff; color: #6c3fff; border-radius: 12px; font-size: .95rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .2s; border: none; text-decoration: none; }
-    .btn-edit-detail:hover { background: #6c3fff; color: #fff; }
-    .btn-delete-detail { padding: 12px 16px; background: #fee2e2; color: #ef4444; border-radius: 12px; font-size: .95rem; font-weight: 700; border: none; cursor: pointer; transition: all .2s; }
-    .btn-delete-detail:hover { background: #ef4444; color: #fff; }
 </style>
 @endsection
 

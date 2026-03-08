@@ -104,22 +104,7 @@
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
 
-                            @auth
-                                @if(auth()->user()->isAdmin())
-                                    <div class="admin-actions">
-                                        <a href="{{ route('products.edit', $product->id) }}" class="btn-edit">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                @endif
-                            @endauth
+
                         </div>
                     </div>
                 @endforeach

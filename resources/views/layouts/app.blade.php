@@ -69,9 +69,7 @@
         .product-card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
         .product-category-tag { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #6c3fff; margin-bottom: 6px; }
         .product-name { font-size: .95rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; line-height: 1.3; flex: 1; }
-        .product-rating { display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
-        .stars { color: #f59e0b; font-size: .8rem; letter-spacing: 1px; }
-        .rating-count { font-size: .75rem; color: #a0aec0; }
+
         .product-price { font-size: 1.15rem; font-weight: 800; color: #1a1a2e; margin-bottom: 14px; }
         .btn-add-cart { width: 100%; padding: 11px; background: #1a1a2e; color: #fff; border-radius: 10px; font-size: .85rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .2s; border: none; cursor: pointer; }
         .btn-add-cart:hover { background: #6c3fff; transform: translateY(-1px); }
