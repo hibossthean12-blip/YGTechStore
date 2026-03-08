@@ -158,9 +158,7 @@
     <div class="navbar-inner">
         <a href="{{ route('home') }}" class="navbar-brand">YG<span> Tech store</span></a>
         <ul class="navbar-nav">
-            <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
             <li><a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}">Products</a></li>
-            <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a></li>
             <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a></li>
         </ul>
         <form action="{{ route('products.index') }}" method="GET" class="navbar-search">
