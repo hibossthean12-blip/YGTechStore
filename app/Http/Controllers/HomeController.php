@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $featuredProducts = Product::with('category', 'ratings')
+        $featuredProducts = Product::with('category')
             ->where('is_featured', true)
             ->get();
 
