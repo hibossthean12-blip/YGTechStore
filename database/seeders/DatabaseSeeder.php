@@ -10,14 +10,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Wipe products and other data to ensure a clean state
-        // We use a try-catch for TRUNCATE to prevent lock-waits from failing the whole deploy
-        try {
-            DB::statement('TRUNCATE TABLE products, product_ratings, carts, cart_items, orders, order_items, contact_messages RESTART IDENTITY CASCADE');
-        } catch (\Exception $e) {
-            // If truncate fails due to a lock, manually delete what we can
-            DB::table('products')->delete();
-        }
 
         // Users - Use updateOrInsert so it NEVER fails the build
         DB::table('users')->updateOrInsert(

@@ -70,7 +70,6 @@
                     <option value="{{ route('products.index', array_merge(request()->except('sort'), ['sort' => 'featured'])) }}" {{ $sort === 'featured' ? 'selected' : '' }}>Featured</option>
                     <option value="{{ route('products.index', array_merge(request()->except('sort'), ['sort' => 'price_asc'])) }}" {{ $sort === 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
                     <option value="{{ route('products.index', array_merge(request()->except('sort'), ['sort' => 'price_desc'])) }}" {{ $sort === 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
-                    <option value="{{ route('products.index', array_merge(request()->except('sort'), ['sort' => 'rating'])) }}" {{ $sort === 'rating' ? 'selected' : '' }}>Highest Rated</option>
                 </select>
             </div>
         </div>
@@ -90,12 +89,6 @@
         @else
             <div class="products-grid">
                 @foreach($products as $product)
-                    @php
-                        $avgRating   = round($product->ratings->avg('rating') ?? 0, 1);
-                        $ratingCount = $product->ratings->count();
-                        $staticCounts = [1 => 234, 2 => 189, 3 => 312, 4 => 156];
-                        $displayCount = $staticCounts[$product->id] ?? $ratingCount;
-                    @endphp
                     <div class="product-card">
                         <a href="{{ route('products.show', $product->id) }}" class="product-card-img">
                             <img src="/{{ $product->image_url }}"
@@ -105,14 +98,7 @@
                         <div class="product-card-body">
                             <div class="product-category-tag">{{ strtoupper($product->category->name ?? '') }}</div>
                             <a href="{{ route('products.show', $product->id) }}" class="product-name">{{ $product->name }}</a>
-                            <div class="product-rating">
-                                <span class="stars">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= floor($avgRating))★@elseif($i - 0.5 <= $avgRating)★@else☆@endif
-                                    @endfor
-                                </span>
-                                <span class="rating-count">({{ $displayCount }})</span>
-                            </div>
+
                             <div class="product-price">${{ number_format($product->price, 2) }}</div>
                             <button class="btn-add-cart" onclick="addToCart({{ $product->id }}, this)">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart

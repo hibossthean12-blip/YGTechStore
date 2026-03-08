@@ -33,10 +33,6 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function ratings(): HasMany
-    {
-        return $this->hasMany(ProductRating::class);
-    }
 
     public function isAdmin(): bool
     {

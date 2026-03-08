@@ -23,11 +23,6 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function ratings(): HasMany
-    {
-        return $this->hasMany(ProductRating::class);
-    }
-
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);
@@ -38,13 +33,5 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function getAverageRatingAttribute(): float
-    {
-        return round($this->ratings()->avg('rating') ?? 0, 1);
-    }
 
-    public function getRatingCountAttribute(): int
-    {
-        return $this->ratings()->count();
-    }
 }

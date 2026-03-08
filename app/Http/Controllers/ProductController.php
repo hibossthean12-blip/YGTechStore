@@ -11,7 +11,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        $query = Product::with('category', 'ratings');
+        $query = Product::with('category');
 
         // Category filter
         if ($request->filled('category') && $request->category !== 'all') {
@@ -23,7 +23,6 @@ class ProductController extends Controller
         match ($sort) {
                 'price_asc' => $query->orderBy('price', 'asc'),
                 'price_desc' => $query->orderBy('price', 'desc'),
-                'rating' => $query->withAvg('ratings', 'rating')->orderByDesc('ratings_avg_rating'),
                 default => $query->orderByDesc('is_featured')->orderBy('id'),
             };
 
@@ -42,7 +41,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::with('category', 'ratings.user')->findOrFail($id);
+        $product = Product::with('category')->findOrFail($id);
 
         return view('products.show', compact('product'));
     }
