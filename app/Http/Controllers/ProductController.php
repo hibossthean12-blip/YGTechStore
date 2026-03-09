@@ -73,11 +73,12 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if (!env('CLOUDINARY_URL')) {
-                return back()->with('error', 'Cloudinary is not configured on the server. Please check Render Environment Variables.');
+            try {
+                $result = cloudinary()->upload($request->file('image')->getRealPath());
+                $validated['image_url'] = $result->getSecurePath();
+            } catch (\Exception $e) {
+                return back()->with('error', 'Cloudinary Upload Failed: ' . $e->getMessage() . '. Please ensure CLOUDINARY_URL is set on Render.');
             }
-            $result = cloudinary()->upload($request->file('image')->getRealPath());
-            $validated['image_url'] = $result->getSecurePath();
         }
         else {
             $validated['image_url'] = 'images/placeholder.jpg';
@@ -120,8 +121,8 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if (!env('CLOUDINARY_URL')) {
-                return back()->with('error', 'Cloudinary is not configured on the server. Please check Render Environment Variables.');
+            if (!config('filesystems.disks.cloudinary.url')) {
+                return back()->with('error', 'Cloudinary configuration is missing. Please check your Render Environment Variables (CLOUDINARY_URL).');
             }
             $result = cloudinary()->upload($request->file('image')->getRealPath());
             $validated['image_url'] = $result->getSecurePath();
