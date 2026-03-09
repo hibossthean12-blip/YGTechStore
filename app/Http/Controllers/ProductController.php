@@ -73,8 +73,8 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $validated['image_url'] = 'storage/' . $path;
+            $result = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::upload($request->file('image')->getRealPath());
+            $validated['image_url'] = $result->getSecurePath();
         }
         else {
             $validated['image_url'] = 'images/placeholder.jpg';
@@ -117,8 +117,8 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $validated['image_url'] = 'storage/' . $path;
+            $result = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::upload($request->file('image')->getRealPath());
+            $validated['image_url'] = $result->getSecurePath();
         }
 
         $validated['is_featured'] = $request->has('is_featured');
