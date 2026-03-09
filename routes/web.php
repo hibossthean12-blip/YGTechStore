@@ -51,6 +51,7 @@ Route::view('/terms-of-service', 'policies.terms')->name('terms.service');
             Route::get('/orders', 'orders')->name('orders');
             Route::post('/orders/{id}/status', 'updateOrderStatus')->name('orders.updateStatus');
             Route::get('/contacts', 'contacts')->name('contacts');
+            Route::post('/contacts/{id}/reply', 'replyToMessage')->name('contacts.reply');
         });
 
         // Products (Admin/Auth)

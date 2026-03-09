@@ -42,4 +42,21 @@ class AdminController extends Controller
 
         return back()->with('error', 'Invalid status update.');
     }
+
+    public function replyToMessage($id, \Illuminate\Http\Request $request)
+    {
+        $message = \App\Models\ContactMessage::findOrFail($id);
+        $reply = $request->input('reply');
+
+        if ($reply) {
+            $message->update([
+                'reply' => $reply,
+                'status' => 'replied',
+                'replied_at' => now(),
+            ]);
+            return back()->with('success', 'Reply sent successfully!');
+        }
+
+        return back()->with('error', 'Reply cannot be empty.');
+    }
 }

@@ -23,6 +23,8 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
+        $validated['user_id'] = auth()->id();
+
         ContactMessage::create($validated);
 
         return back()->with('success', 'Your message has been sent! We\'ll get back to you within 24 hours.');

@@ -44,9 +44,26 @@
                         <!-- Right: Message Content -->
                         <div>
                             <div class="order-section-title">Message: "{{ $contact->subject }}"</div>
-                            <div style="background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #f1f5f9; font-size: .9rem; color: #4a5568; line-height: 1.7; white-space: pre-line;">
+                            <div style="background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #f1f5f9; font-size: .9rem; color: #4a5568; line-height: 1.7; white-space: pre-line; margin-bottom: 20px;">
                                 {{ $contact->message }}
                             </div>
+
+                            @if($contact->reply)
+                                <div class="order-section-title" style="color: #6c3fff;">Our Reply:</div>
+                                <div style="background: #f8f6ff; padding: 16px; border-radius: 12px; border: 1px solid #e9e4ff; font-size: .9rem; color: #4a5568; line-height: 1.7; white-space: pre-line; margin-bottom: 20px;">
+                                    {{ $contact->reply }}
+                                    <div style="font-size: 0.75rem; color: #a0aec0; margin-top: 8px;">Replied {{ $contact->replied_at ? $contact->replied_at->diffForHumans() : '' }}</div>
+                                </div>
+                            @endif
+
+                            <div class="order-section-title">{{ $contact->reply ? 'Update Reply' : 'Reply to Customer' }}</div>
+                            <form action="{{ route('admin.contacts.reply', $contact->id) }}" method="POST">
+                                @csrf
+                                <textarea name="reply" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: .9rem; min-height: 100px; margin-bottom: 12px; outline: none; transition: border-color .2s;" placeholder="Type your reply here..." required>{{ $contact->reply }}</textarea>
+                                <button type="submit" class="btn-shop" style="width: auto; padding: 10px 24px; font-size: .9rem;">
+                                    <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Reply
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
