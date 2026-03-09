@@ -248,48 +248,5 @@
         <a href="{{ route('products.index') }}" class="btn-shop">Start Shopping</a>
     </div>
     @endforelse
-
-    <!-- CUSTOMER SERVICE HISTORY -->
-    <div style="margin-top: 60px;">
-        <h2 class="page-title"><i class="fas fa-headset" style="color: #6c3fff;"></i> Customer Service History</h2>
-        
-        @forelse($messages as $msg)
-            <div class="order-card" style="border-left: 4px solid #6c3fff;">
-                <div class="order-header" style="background: #fdfbff;">
-                    <div class="order-info">
-                        <div class="info-group">
-                            <span class="info-label">Sent On</span>
-                            <span class="info-value">{{ $msg->created_at->format('M d, Y') }}</span>
-                        </div>
-                        <div class="info-group">
-                            <span class="info-label">Subject</span>
-                            <span class="info-value">{{ $msg->subject }}</span>
-                        </div>
-                    </div>
-                    <span class="order-status {{ $msg->status === 'replied' ? 'status-completed' : 'status-pending' }}">
-                        {{ $msg->status === 'replied' ? 'Replied' : 'Pending' }}
-                    </span>
-                </div>
-                <div class="order-body" style="padding: 20px 24px;">
-                    <div style="font-size: 0.9rem; color: #4a5568; line-height: 1.6; margin-bottom: 16px;">
-                        <strong style="color: #1a1a2e; display: block; margin-bottom: 4px;">Your Message:</strong>
-                        {{ $msg->message }}
-                    </div>
-
-                    @if($msg->reply)
-                        <div style="background: #f8f6ff; padding: 16px; border-radius: 12px; border: 1px solid #e9e4ff; font-size: 0.9rem; color: #4a5568; line-height: 1.6;">
-                            <strong style="color: #6c3fff; display: block; margin-bottom: 4px;">Support Reply:</strong>
-                            {{ $msg->reply }}
-                            <div style="font-size: 0.75rem; color: #a0aec0; margin-top: 8px;">Replied {{ $msg->replied_at ? $msg->replied_at->diffForHumans() : '' }}</div>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        @empty
-            <div class="empty-state" style="padding: 40px 24px;">
-                <p style="margin-bottom: 0;">No message history found. If you have any questions, <a href="{{ route('contact') }}" style="color: #6c3fff; font-weight: 700;">contact us here</a>.</p>
-            </div>
-        @endforelse
-    </div>
 </div>
 @endsection

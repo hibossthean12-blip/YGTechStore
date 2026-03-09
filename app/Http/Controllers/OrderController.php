@@ -17,11 +17,7 @@ class OrderController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $messages = \App\Models\ContactMessage::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('orders.index', compact('orders', 'messages'));
+        return view('orders.index', compact('orders'));
     }
 
     public function cancel($id)

@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InboxController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -74,7 +75,10 @@ Route::view('/terms-of-service', 'policies.terms')->name('terms.service');
         Route::post('/orders/{id}/cancel', 'cancel')->name('orders.cancel');
     });
 
-    // Profile Settings
+        // Inbox (Messenger)
+        Route::get('/inbox', [InboxController::class, 'index'])->name('inbox');
+
+        // Profile Settings
     Route::controller(ProfileController::class)->group(function () {
         Route::get('/profile', 'edit')->name('profile.edit');
         Route::patch('/profile', 'update')->name('profile.update');

@@ -219,6 +219,7 @@
                         @if(!auth()->user()->isAdmin())
                             <a href="{{ route('profile.edit') }}"><i class="fas fa-user-circle"></i> Profile</a>
                             <a href="{{ route('orders.index') }}"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                            <a href="{{ route('inbox') }}"><i class="fas fa-comments"></i> Inbox</a>
                         @endif
                         <hr class="dropdown-divider">
                         <form method="POST" action="{{ route('logout') }}">
