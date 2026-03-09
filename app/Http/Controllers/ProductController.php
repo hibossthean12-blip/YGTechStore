@@ -120,6 +120,9 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
+            if (!env('CLOUDINARY_URL')) {
+                return back()->with('error', 'Cloudinary is not configured on the server. Please check Render Environment Variables.');
+            }
             $result = cloudinary()->upload($request->file('image')->getRealPath());
             $validated['image_url'] = $result->getSecurePath();
         }
