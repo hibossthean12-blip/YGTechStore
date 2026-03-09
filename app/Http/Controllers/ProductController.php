@@ -73,7 +73,7 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $result = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::upload($request->file('image')->getRealPath());
+            $result = cloudinary()->upload($request->file('image')->getRealPath());
             $validated['image_url'] = $result->getSecurePath();
         }
         else {
