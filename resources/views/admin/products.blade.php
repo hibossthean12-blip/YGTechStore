@@ -30,7 +30,7 @@
                             <tr class="border-b border-gray-100 hover:bg-gray-50">
                                 <td class="p-4 flex items-center gap-3">
                                     <div class="w-12 h-12 rounded-md overflow-hidden bg-gray-100 shrink-0">
-                                        <img src="/{{ $product->image_url }}" class="w-full h-full object-cover">
+                                        <img src="{{ asset($product->image_url) }}" class="w-full h-full object-cover">
                                     </div>
                                     <span class="font-medium text-gray-800">{{ $product->name }}</span>
                                 </td>

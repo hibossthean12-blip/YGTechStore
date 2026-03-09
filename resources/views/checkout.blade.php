@@ -253,7 +253,7 @@
             <div class="item-list">
                 @foreach($items as $item)
                 <div class="mini-item">
-                    <img src="/{{ $item['image_url'] }}" alt="{{ $item['name'] }}" onerror="this.src='https://placehold.co/64x64/f0ecff/6c3fff?text=IMG'">
+                    <img src="{{ asset($item['image_url']) }}" alt="{{ $item['name'] }}" onerror="this.src='https://placehold.co/64x64/f0ecff/6c3fff?text=IMG'">
                     <div class="mini-item-info">
                         <div class="mini-item-name">{{ $item['name'] }}</div>
                         <div class="mini-item-price">{{ $item['quantity'] }} x ${{ number_format($item['price'], 2) }}</div>

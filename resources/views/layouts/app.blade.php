@@ -313,6 +313,7 @@
 
 <script>
     const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').content;
+    const ASSET_URL = "{{ asset('') }}";
 
     function toggleCart() {
         const overlay = document.getElementById('cartOverlay');
@@ -348,7 +349,7 @@
             body.innerHTML = data.items.map(item => `
                 <div class="cart-item">
                     <div class="cart-item-img">
-                        <img src="/${item.image_url || ''}" alt="${item.name}" onerror="this.src='https://placehold.co/64x64/f0ecff/6c3fff?text=IMG'">
+                        <img src="${ASSET_URL}${item.image_url || ''}" alt="${item.name}" onerror="this.src='https://placehold.co/64x64/f0ecff/6c3fff?text=IMG'">
                     </div>
                     <div class="cart-item-details">
                         <div class="cart-item-name">${item.name}</div>

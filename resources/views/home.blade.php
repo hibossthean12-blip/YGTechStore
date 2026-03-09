@@ -108,7 +108,7 @@
             @foreach($featuredProducts as $product)
                 <div class="product-card">
                     <a href="{{ route('products.show', $product->id) }}" class="product-card-img">
-                        <img src="/{{ $product->image_url }}"
+                        <img src="{{ asset($product->image_url) }}"
                              alt="{{ $product->name }}"
                              onerror="this.src='https://placehold.co/400x300/f0ecff/6c3fff?text={{ urlencode($product->name) }}'">
                     </a>

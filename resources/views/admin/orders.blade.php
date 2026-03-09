@@ -61,7 +61,7 @@
                             <div class="product-item-list">
                                 @foreach($order->items as $item)
                                     <div class="product-item">
-                                        <img src="/{{ $item->product->image_url }}" 
+                                        <img src="{{ asset($item->product->image_url) }}" 
                                              alt="{{ $item->product->name }}" 
                                              class="product-thumb"
                                              onerror="this.src='https://placehold.co/100x100?text=Product'">

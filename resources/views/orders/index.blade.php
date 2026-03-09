@@ -218,7 +218,7 @@
         <div class="order-body">
             @foreach($order->items as $item)
             <div class="item-row">
-                <img src="/{{ $item->product->image_url }}" alt="{{ $item->product->name }}" class="item-img" onerror="this.src='https://placehold.co/100x100/f0ecff/6c3fff?text=IMG'">
+                <img src="{{ asset($item->product->image_url) }}" alt="{{ $item->product->name }}" class="item-img" onerror="this.src='https://placehold.co/100x100/f0ecff/6c3fff?text=IMG'">
                 <div class="item-details">
                     <div class="item-name">{{ $item->product->name }}</div>
                     <div class="item-meta">Quantity: {{ $item->quantity }} • ${{ number_format($item->price, 2) }} each</div>
