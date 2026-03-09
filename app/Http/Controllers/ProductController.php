@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -74,7 +75,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             try {
-                $result = cloudinary()->upload($request->file('image')->getRealPath());
+                $result = Cloudinary::upload($request->file('image')->getRealPath());
                 $validated['image_url'] = $result->getSecurePath();
             } catch (\Exception $e) {
                 return back()->with('error', 'Cloudinary Upload Failed: ' . $e->getMessage() . '. Please ensure CLOUDINARY_URL is set on Render.');
@@ -124,7 +125,7 @@ class ProductController extends Controller
             if (!config('filesystems.disks.cloudinary.url')) {
                 return back()->with('error', 'Cloudinary configuration is missing. Please check your Render Environment Variables (CLOUDINARY_URL).');
             }
-            $result = cloudinary()->upload($request->file('image')->getRealPath());
+            $result = Cloudinary::upload($request->file('image')->getRealPath());
             $validated['image_url'] = $result->getSecurePath();
         }
 
