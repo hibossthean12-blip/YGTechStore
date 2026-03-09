@@ -31,6 +31,11 @@
     .btn-detail-cart:hover { background: #6c3fff; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,63,255,.3); }
     .btn-detail-cart.added { background: #10b981; }
 
+    .btn-detail-edit { flex: 1; min-width: 200px; padding: 15px 24px; background: #f0ecff; color: #6c3fff; border-radius: 12px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all .2s; text-decoration: none; }
+    .btn-detail-edit:hover { background: #6c3fff; color: #fff; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,63,255,.3); }
+    .btn-detail-delete { width: 56px; height: 56px; background: #fee2e2; color: #ef4444; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: all .2s; border: none; cursor: pointer; }
+    .btn-detail-delete:hover { background: #ef4444; color: #fff; transform: translateY(-2px); }
+
     /* GUARANTEE BADGES */
     .guarantee-row { display: flex; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
     .guarantee { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: #6b7280; }
@@ -68,7 +73,14 @@
                 <h1 class="detail-name">{{ $product->name }}</h1>
 
 
-                <div class="detail-price">${{ number_format($product->price, 2) }}</div>
+                <div class="flex items-baseline justify-between gap-4 mb-2">
+                    <div class="detail-price">${{ number_format($product->price, 2) }}</div>
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <div class="text-sm font-bold text-indigo-600 uppercase tracking-wider">Stock Remain : {{ $product->stock }}</div>
+                        @endif
+                    @endauth
+                </div>
                 <div class="detail-stock">
                     @if($product->stock > 0)
                         <span>✓ In Stock</span> — {{ $product->stock }} units available
@@ -80,27 +92,30 @@
                 <p class="detail-desc">{{ $product->description }}</p>
 
                 <div class="detail-actions">
-                    <button class="btn-detail-cart" onclick="addToCart({{ $product->id }}, this)">
-                        <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
-                </div>
-
-                @auth
-                    @if(auth()->user()->isAdmin())
-                        <div class="admin-detail-actions">
-                            <a href="{{ route('products.edit', $product->id) }}" class="btn-edit-detail">
+                    @if(!auth()->check())
+                        <a href="{{ route('login') }}" class="btn-detail-cart" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i> Login to Order
+                        </a>
+                    @elseif(!auth()->user()->isAdmin())
+                        <button class="btn-detail-cart" onclick="addToCart({{ $product->id }}, this)">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    @endif
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('products.edit', $product->id) }}" class="btn-detail-edit">
                                 <i class="fas fa-edit"></i> Edit Product
                             </a>
-                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')" class="flex">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-delete-detail">
+                                <button type="submit" class="btn-detail-delete" title="Delete Product">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
-                        </div>
-                    @endif
-                @endauth
+                        @endif
+                    @endauth
+                </div>
 
                 <div class="guarantee-row">
                     <div class="guarantee"><i class="fas fa-truck"></i> Free Shipping over $50</div>

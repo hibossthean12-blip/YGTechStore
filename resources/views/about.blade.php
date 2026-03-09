@@ -165,10 +165,10 @@
                 <p>Our team meticulously selects every item in our inventory, ensuring it meets our rigorous standards for performance, durability, and style. We aren't just selling products; we're providing the tools that empower your digital lifestyle.</p>
                 
                 <div class="brand-logos">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" class="brand-logo" style="height: 30px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" alt="Samsung" class="brand-logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Sony_logo.svg" alt="Sony" class="brand-logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/HP_logo_2012.svg" alt="HP" class="brand-logo" style="height: 30px;">
+                    <img src="{{ asset('images/logos/apple.png') }}" alt="Apple" class="brand-logo" style="height: 30px;">
+                    <img src="{{ asset('images/logos/samsung.png') }}" alt="Samsung" class="brand-logo">
+                    <img src="{{ asset('images/logos/asus.png') }}" alt="Asus" class="brand-logo">
+                    <img src="{{ asset('images/logos/razer.png') }}" alt="Razer" class="brand-logo" style="height: 30px;">
                 </div>
             </div>
             

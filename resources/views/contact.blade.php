@@ -54,12 +54,6 @@
     .faq-q { font-size: .875rem; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
     .faq-a { font-size: .825rem; color: #6b7280; line-height: 1.6; }
 
-    /* LIVE CHAT */
-    .live-chat-card { background: linear-gradient(135deg,#6c3fff,#a855f7); border-radius: 14px; padding: 24px; color: #fff; }
-    .live-chat-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
-    .live-chat-desc  { font-size: .825rem; opacity: .85; margin-bottom: 16px; line-height: 1.6; }
-    .btn-live-chat { width: 100%; padding: 12px; background: rgba(255,255,255,.15); color: #fff; border-radius: 10px; font-size: .875rem; font-weight: 700; border: 1.5px solid rgba(255,255,255,.4); display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .2s; cursor: pointer; }
-    .btn-live-chat:hover { background: rgba(255,255,255,.25); border-color: #fff; }
 </style>
 @endsection
 
@@ -79,17 +73,17 @@
         <div class="contact-info-card">
             <div class="contact-icon purple"><i class="fas fa-phone-alt"></i></div>
             <div class="contact-info-title">Phone</div>
-            <div class="contact-info-val">+1 (555) 123-4567<br>Mon-Fri 9am-6pm EST</div>
+            <div class="contact-info-val">012 323 123<br>Mon-Fri 9am-6pm EST</div>
         </div>
         <div class="contact-info-card">
             <div class="contact-icon blue"><i class="fas fa-envelope"></i></div>
             <div class="contact-info-title">Email</div>
-            <div class="contact-info-val">support@ygtechstore.com<br>We reply within 24 hours</div>
+            <div class="contact-info-val">admin@techstore.com<br>We reply within 24 hours</div>
         </div>
         <div class="contact-info-card">
             <div class="contact-icon green"><i class="fas fa-map-marker-alt"></i></div>
             <div class="contact-info-title">Location</div>
-            <div class="contact-info-val">123 Tech Street<br>San Francisco, CA 94102</div>
+            <div class="contact-info-val">The Vanda Building, Floor 13<br>Phnom Penh, Cambodia</div>
         </div>
     </div>
 
@@ -170,12 +164,6 @@
                 </div>
             </div>
 
-            <!-- LIVE CHAT -->
-            <div class="live-chat-card">
-                <div class="live-chat-title"><i class="fas fa-comments"></i> Need Immediate Help?</div>
-                <p class="live-chat-desc">Our YG Tech store customer support team is available via live chat during business hours.</p>
-                <button class="btn-live-chat"><i class="fas fa-comment-dots"></i> Start Live Chat</button>
-            </div>
         </div>
     </div>
 </div>

@@ -148,6 +148,37 @@
         .user-dropdown a, .user-dropdown button { display: flex; align-items: center; gap: 10px; padding: 12px 16px; font-size: .875rem; color: #4a5568; width: 100%; text-align: left; transition: background .15s; background: none; border: none; cursor: pointer; }
         .user-dropdown a:hover, .user-dropdown button:hover { background: #f8fafc; color: #1a1a2e; }
         .dropdown-divider { border: none; border-top: 1px solid #edf2f7; margin: 4px 0; }
+
+        /* ORDER MANAGE STYLES */
+        .order-card { background: #fff; border-radius: 16px; border: 1px solid #edf2f7; margin-bottom: 24px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .order-header { padding: 20px 24px; border-bottom: 1px solid #f0f4f8; display: flex; justify-content: space-between; align-items: center; background: #fbfbfc; }
+        .order-id { font-size: .75rem; font-weight: 700; color: #6c3fff; text-transform: uppercase; letter-spacing: 1px; }
+        .order-customer { font-size: 1.1rem; font-weight: 800; color: #1a1a2e; margin: 4px 0; }
+        .order-date { font-size: .85rem; color: #718096; }
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: .75rem; font-weight: 700; text-transform: uppercase; }
+        .status-pending { background: #fff7ed; color: #c2410c; }
+        .status-completed { background: #ecfdf5; color: #047857; }
+        .status-cancelled { background: #fff5f5; color: #c53030; }
+
+        /* Action Buttons */
+        .status-btn { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-confirm { background: #6c3fff; color: white; }
+        .btn-confirm:hover { background: #5a32d6; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(108, 63, 255, 0.2); }
+        .btn-cancel { background: #f1f5f9; color: #64748b; }
+        .btn-cancel:hover { background: #e2e8f0; color: #0f172a; }
+    .btn-cancel-order { padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; cursor: pointer; transition: all 0.2s; }
+    .btn-cancel-order:hover { background: #fee2e2; color: #c53030; }
+        .order-body { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+        @media(max-width:768px){ .order-body { grid-template-columns: 1fr; } }
+        .order-section-title { font-size: .8rem; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+        .shipping-box { background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #f1f5f9; font-size: .9rem; color: #4a5568; line-height: 1.6; }
+        .product-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+        .product-item:last-child { border-bottom: none; }
+        .product-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #f1f5f9; }
+        .product-info { flex: 1; }
+        .product-name-sm { font-size: .875rem; font-weight: 700; color: #1a1a2e; }
+        .product-meta-sm { font-size: .8rem; color: #718096; }
+        .order-total-val { font-size: 1.25rem; font-weight: 800; color: #1a1a2e; text-align: right; }
     </style>
     @yield('styles')
 </head>
@@ -159,23 +190,36 @@
         <a href="{{ route('home') }}" class="navbar-brand">YG<span> Tech store</span></a>
         <ul class="navbar-nav">
             <li><a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}">Products</a></li>
-            <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a></li>
+            @if(!auth()->check() || !auth()->user()->isAdmin())
+                <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About Us</a></li>
+                <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a></li>
+            @endif
+            @auth
+                @if(auth()->user()->isAdmin())
+                    <li><a href="{{ route('admin.orders') }}" class="{{ request()->routeIs('admin.orders') ? 'active' : '' }}">Customer Order</a></li>
+                    <li><a href="{{ route('admin.contacts') }}" class="{{ request()->routeIs('admin.contacts') ? 'active' : '' }}">Customer Service</a></li>
+                @endif
+            @endauth
         </ul>
         <form action="{{ route('products.index') }}" method="GET" class="navbar-search">
             <i class="fas fa-search search-icon"></i>
             <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}" autocomplete="off">
         </form>
         <div class="navbar-actions">
-            <button class="btn-cart" onclick="toggleCart()" aria-label="Shopping Cart">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
-            </button>
-            @auth
+            @if(!auth()->check() || !auth()->user()->isAdmin())
+                <button class="btn-cart" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+                </button>
+            @endif
+@auth
                 <div class="user-menu" tabindex="0">
                     <div class="user-avatar">{{ substr(auth()->user()->name, 0, 1) }}</div>
                     <div class="user-dropdown">
-                        <a href="{{ route('profile.edit') }}"><i class="fas fa-user-circle"></i> Profile</a>
-                        <a href="{{ route('orders.index') }}"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                        @if(!auth()->user()->isAdmin())
+                            <a href="{{ route('profile.edit') }}"><i class="fas fa-user-circle"></i> Profile</a>
+                            <a href="{{ route('orders.index') }}"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                        @endif
                         <hr class="dropdown-divider">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -201,6 +245,7 @@
     @yield('content')
 </main>
 
+@if(!auth()->check() || !auth()->user()->isAdmin())
 <!-- FOOTER -->
 <footer class="footer">
     <div class="footer-grid">
@@ -218,20 +263,12 @@
             </ul>
         </div>
         <div>
-            <div class="footer-heading">Support</div>
-            <ul class="footer-links">
-                <li><a href="{{ route('contact') }}">Contact Us</a></li>
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Returns</a></li>
-                <li><a href="#">Shipping</a></li>
-            </ul>
-        </div>
-        <div>
             <div class="footer-heading">Company</div>
             <ul class="footer-links">
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
+                <li><a href="{{ route('about') }}">About Us</a></li>
+                <li><a href="{{ route('contact') }}">Contact Us</a></li>
+                <li><a href="{{ route('privacy.policy') }}">Privacy Policy</a></li>
+                <li><a href="{{ route('terms.service') }}">Terms of Service</a></li>
             </ul>
         </div>
     </div>
@@ -240,6 +277,10 @@
         <span>Made with <i class="fas fa-heart" style="color:#a78bfa;"></i> for tech lovers</span>
     </div>
 </footer>
+@endif
+
+
+
 
 <!-- CART SIDEBAR -->
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
@@ -260,7 +301,11 @@
             <span>Total</span>
             <span class="cart-total-amount" id="cartTotal">$0.00</span>
         </div>
-        <a href="{{ route('checkout.index') }}" class="btn-checkout"><i class="fas fa-lock"></i> Checkout</a>
+        @if(!auth()->check())
+            <a href="{{ route('login') }}" class="btn-checkout"><i class="fas fa-sign-in-alt"></i> Login to Checkout</a>
+        @else
+            <a href="{{ route('checkout.index') }}" class="btn-checkout"><i class="fas fa-lock"></i> Checkout</a>
+        @endif
     </div>
 </div>
 

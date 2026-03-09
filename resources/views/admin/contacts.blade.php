@@ -3,59 +3,63 @@
 @section('title', 'Contact Messages')
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-800">Contact Messages</h1>
-        </div>
+<div class="section" style="padding: 40px 0;">
+    <div class="container">
+        <h1 style="font-size: 2rem; font-weight: 800; color: #1a1a2e; margin-bottom: 32px;">Customer Service</h1>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-50 border-b border-gray-200">
-                            <th class="p-4 font-semibold text-gray-600 w-1/4">Name & Email</th>
-                            <th class="p-4 font-semibold text-gray-600 w-1/4">Subject & Date</th>
-                            <th class="p-4 font-semibold text-gray-600 w-2/4">Message</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($contacts as $contact)
-                            <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                <td class="p-4 align-top">
-                                    <div class="font-medium text-gray-800">{{ $contact->first_name }} {{ $contact->last_name }}</div>
-                                    <div class="text-sm text-gray-500 mt-1">
-                                        <a href="mailto:{{ $contact->email }}" class="hover:text-indigo-600">{{ $contact->email }}</a>
+        <div class="order-list">
+            @forelse($contacts as $contact)
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <span class="order-id">Message #{{ $contact->id }}</span>
+                            <div class="order-customer">{{ $contact->first_name }} {{ $contact->last_name }}</div>
+                            <div class="order-date"><i class="far fa-clock" style="margin-right:6px;"></i>{{ $contact->created_at->diffForHumans() }}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="status-badge {{ $contact->status === 'pending' ? 'status-pending' : 'status-completed' }}">
+                                {{ $contact->status }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="order-body">
+                        <!-- Left: Customer Contact Info -->
+                        <div>
+                            <div class="order-section-title">Customer Details</div>
+                            <div class="shipping-box">
+                                <div style="margin-bottom: 8px;">
+                                    <i class="fas fa-envelope" style="color:#6c3fff; width:20px;"></i>
+                                    <a href="mailto:{{ $contact->email }}" style="color: inherit; text-decoration: none; font-weight: 600;">{{ $contact->email }}</a>
+                                </div>
+                                @if($contact->phone)
+                                    <div>
+                                        <i class="fas fa-phone-alt" style="color:#6c3fff; width:20px;"></i>
+                                        <span style="font-weight: 600;">{{ $contact->phone }}</span>
                                     </div>
-                                    @if($contact->phone)
-                                        <div class="text-sm text-gray-500">{{ $contact->phone }}</div>
-                                    @endif
-                                </td>
-                                <td class="p-4 align-top">
-                                    <div class="font-medium text-gray-800">{{ $contact->subject }}</div>
-                                    <div class="text-sm text-gray-500 mt-1" title="{{ $contact->created_at }}">
-                                        {{ $contact->created_at->diffForHumans() }}
-                                    </div>
-                                </td>
-                                <td class="p-4 align-top">
-                                    <div class="text-gray-700 whitespace-pre-line text-sm bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        {{ $contact->message }}
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="p-8 text-center text-gray-500">
-                                    No contact messages yet.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                                @endif
+                            </div>
+                        </div>
 
+                        <!-- Right: Message Content -->
+                        <div>
+                            <div class="order-section-title">Message: "{{ $contact->subject }}"</div>
+                            <div style="background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #f1f5f9; font-size: .9rem; color: #4a5568; line-height: 1.7; white-space: pre-line;">
+                                {{ $contact->message }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div style="background: #fff; border-radius: 16px; border: 1px solid #edf2f7; padding: 60px; text-align: center;">
+                    <div style="width: 70px; height: 70px; background: #f8fafc; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #a0aec0;">
+                        <i class="fas fa-envelope-open-text" style="font-size: 1.5rem;"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: #1a1a2e; margin-bottom: 8px;">No messages found</h3>
+                    <p style="color: #718096;">When customers send messages, they will appear here.</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 </div>
 @endsection

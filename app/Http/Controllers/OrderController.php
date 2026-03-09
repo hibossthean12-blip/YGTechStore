@@ -19,4 +19,16 @@ class OrderController extends Controller
 
         return view('orders.index', compact('orders'));
     }
+
+    public function cancel($id)
+    {
+        $order = Order::where('user_id', auth()->id())->findOrFail($id);
+
+        if ($order->status === 'pending') {
+            $order->update(['status' => 'cancelled']);
+            return back()->with('success', 'Order cancelled successfully.');
+        }
+
+        return back()->with('error', 'Only pending orders can be cancelled.');
+    }
 }

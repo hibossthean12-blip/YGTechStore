@@ -99,10 +99,39 @@
                             <div class="product-category-tag">{{ strtoupper($product->category->name ?? '') }}</div>
                             <a href="{{ route('products.show', $product->id) }}" class="product-name">{{ $product->name }}</a>
 
-                            <div class="product-price">${{ number_format($product->price, 2) }}</div>
-                            <button class="btn-add-cart" onclick="addToCart({{ $product->id }}, this)">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <div class="product-price">${{ number_format($product->price, 2) }}</div>
+                                @if(!auth()->check())
+                                    <a href="{{ route('login') }}" class="btn-add-cart" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-sign-in-alt"></i> Login to Order
+                                    </a>
+                                @elseif(!auth()->user()->isAdmin())
+                                    <button class="btn-add-cart" onclick="addToCart({{ $product->id }}, this)">
+                                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                                    </button>
+                                @endif
+                                @auth
+                                    @if(auth()->user()->isAdmin())
+                                        <div class="text-[0.7rem] font-bold text-gray-400 uppercase tracking-tight">Stock Remain : {{ $product->stock }}</div>
+                                    @endif
+                                @endauth
+                            </div>
+                            @auth
+                                @if(auth()->user()->isAdmin())
+                                    <div class="admin-actions">
+                                        <a href="{{ route('products.edit', $product->id) }}" class="btn-edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Delete this product?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            @endauth
 
 
                         </div>

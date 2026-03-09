@@ -68,12 +68,8 @@
         <h1>Premium Tech Products<br>at Your Fingertips</h1>
         <p class="hero-desc">Discover the latest technology and gadgets with fast shipping and unbeatable prices at YG Tech store.</p>
         <div class="hero-actions">
-            <a href="{{ route('products.index') }}" class="btn-hero-primary">
-                Shop Now <i class="fas fa-arrow-right"></i>
-            </a>
-            <a href="{{ route('contact') }}" class="btn-hero-outline">
-                Contact Us
-            </a>
+            <a href="{{ route('products.index') }}" class="btn-hero-primary"><i class="fas fa-shopping-bag"></i> Shop Now</a>
+            <a href="{{ route('contact') }}" class="btn-hero-outline"><i class="fas fa-envelope"></i> Contact Us</a>
         </div>
     </div>
 </section>
@@ -120,9 +116,15 @@
                         <div class="product-category-tag">{{ strtoupper($product->category->name ?? '') }}</div>
                         <a href="{{ route('products.show', $product->id) }}" class="product-name">{{ $product->name }}</a>
                         <div class="product-price">${{ number_format($product->price, 2) }}</div>
-                        <button class="btn-add-cart" onclick="addToCart({{ $product->id }}, this)">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
+                        @if(!auth()->check())
+                            <a href="{{ route('login') }}" class="btn-add-cart" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-sign-in-alt"></i> Login to Order
+                            </a>
+                        @elseif(!auth()->user()->isAdmin())
+                            <button class="btn-add-cart" onclick="addToCart({{ $product->id }}, this)">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        @endif
                     </div>
                 </div>
             @endforeach

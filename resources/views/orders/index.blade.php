@@ -203,8 +203,15 @@
                     <span class="info-value">{{ str_pad($order->id, 8, '0', STR_PAD_LEFT) }}</span>
                 </div>
             </div>
-            <span class="order-status status-{{ $order->status }}">
-                {{ ucfirst($order->status) }}
+            <span class="order-status 
+                {{ $order->status === 'pending' ? 'status-pending' : ($order->status === 'cancelled' ? 'status-cancelled' : 'status-completed') }}">
+                @if($order->status === 'delivered')
+                    Confirm
+                @elseif($order->status === 'cancelled')
+                    Cancel
+                @else
+                    {{ ucfirst($order->status) }}
+                @endif
             </span>
         </div>
 
@@ -225,6 +232,12 @@
                 <i class="fas fa-truck-moving" style="margin-right: 6px;"></i>
                 <strong>Shipping to:</strong> {{ $order->shipping_address }}
             </div>
+            @if($order->status === 'pending')
+            <form action="{{ route('orders.cancel', $order->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn-cancel-order" onclick="return confirm('Are you sure you want to cancel this order?')">Cancel Order</button>
+            </form>
+            @endif
         </div>
     </div>
     @empty
