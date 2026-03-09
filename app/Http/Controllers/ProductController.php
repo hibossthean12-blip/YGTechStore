@@ -75,8 +75,8 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             try {
-                $result = Cloudinary::upload($request->file('image')->getRealPath());
-                $validated['image_url'] = $result->getSecurePath();
+                $result = cloudinary()->uploadApi()->upload($request->file('image')->getRealPath());
+                $validated['image_url'] = $result['secure_url'];
             } catch (\Exception $e) {
                 return back()->with('error', 'Cloudinary Upload Failed: ' . $e->getMessage() . '. Please ensure CLOUDINARY_URL is set on Render.');
             }
@@ -125,8 +125,8 @@ class ProductController extends Controller
             if (!config('filesystems.disks.cloudinary.url')) {
                 return back()->with('error', 'Cloudinary configuration is missing. Please check your Render Environment Variables (CLOUDINARY_URL).');
             }
-            $result = Cloudinary::upload($request->file('image')->getRealPath());
-            $validated['image_url'] = $result->getSecurePath();
+            $result = cloudinary()->uploadApi()->upload($request->file('image')->getRealPath());
+            $validated['image_url'] = $result['secure_url'];
         }
 
         $validated['is_featured'] = $request->has('is_featured');
